@@ -15,8 +15,14 @@ def create_tables():
 
 @app.route('/')
 def index():
-    todos = Todo.query.all()
-    return render_template('index.html', todos=todos)
+    search_query = request.args.get("search", "").strip().lower()
+
+    if search_query:
+        todos = Todo.query.filter(Todo.task.ilike(f"%{search_query}%")).all()
+    else :
+        todos = Todo.query.all()
+        
+    return render_template('index.html', todos=todos, search_query=search_query)
 
 @app.route('/add', methods=['POST'])
 def add_todo():
