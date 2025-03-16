@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" class="w-50 mx-auto">
+        <div class="text-center" style="margin-bottom: 30px;">
+            <h2 class="text-center ">Login</h2>
+            <p>Don't have an account? <a href='{{url_for("register")}}'>Register</a></p>
+        </div>
+        <div class="mb-5">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" name="username" class="form-control" placeholder="Masukan Username Anda" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" name="password" class="form-control" placeholder="Masukan Password Anda" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+{% endblock %}
