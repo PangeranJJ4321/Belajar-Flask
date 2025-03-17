@@ -1,21 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST" class="w-50 mx-auto">
-        <div class="text-center" style="margin-bottom: 30px;">
-            <h2 class="text-center ">Login</h2>
-            <p>Don't have an account? <a href='{{url_for("register")}}'>Register</a></p>
-        </div>
-        <div class="mb-5">
-            <label for="username" class="form-label">Username:</label>
-            <input type="text" name="username" class="form-control" placeholder="Masukan Username Anda" required>
+<div class="w-50 mx-auto">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <h2 class="text-center">Login</h2>
+        <p class="text-center">Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+
+        <div class="mb-3">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control", placeholder="Masukkan Username Anda") }}
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label">Password:</label>
-            <input type="password" name="password" class="form-control" placeholder="Masukan Password Anda" required>
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control", placeholder="Masukkan Password Anda") }}
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Login</button>
+        {{ form.submit(class="btn btn-primary w-100") }}
     </form>
+</div>
 {% endblock %}
