@@ -1,4 +1,5 @@
 from flask import Flask, flash, redirect, render_template, url_for
+from flask_login import login_required, login_user, logout_user
 from flask_migrate import Migrate  
 from wtforms import StringField, PasswordField, SubmitField 
 from wtforms.validators import InputRequired, Length, ValidationError
@@ -12,7 +13,7 @@ app.config.from_object(Config)
 db.init_app(app)
 bcrypt = Bcrypt(app)
 login_maneger.init_app(app)
-login_maneger.login_view = "login"
+login_maneger.login_view = "home"
 migrate = Migrate(app, db)
 
 @login_maneger.user_loader
@@ -35,6 +36,7 @@ class RegisterForm(FlaskForm):
                 "That username already axists. Please choose a different one."
             )
         
+        
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={'placholder': 'Username'})
 
@@ -42,7 +44,7 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField("Login")
 
-@app.route('/')
+@app.route('/home')
 def home():
     return render_template('home.html')
 
@@ -50,7 +52,11 @@ def home():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        flash("Login berhasil!", "seccess")
+        user = User.query.filter_by(username=form.username.data).first()
+
+        if user:
+            if bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user)
         return redirect(url_for('dashboard'))
     return render_template('login.html', form=form)
 
@@ -66,9 +72,16 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
 def dashboard():
-    return "hai"
+    return render_template('dashboard.html')
+
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)
