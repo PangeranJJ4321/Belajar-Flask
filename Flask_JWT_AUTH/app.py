@@ -1,13 +1,17 @@
 from flask import Flask
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt, jwt_required
+from extensions import db
 from dotenv import load_dotenv
-import os
 
+# Load .env
+load_dotenv()
 
 app = Flask(__name__)
-app.config.from_prefixed_env("JWT_SECRET_KEY")
 
-jwt = JWTManager(app)
+# Load konfigurasi dari environment variables dengan prefix FLASK_
+app.config.from_prefixed_env()
+
+
+db.init_app(app)
 
 if __name__ == "__main__":
     app.run(debug=True)
