@@ -19,10 +19,25 @@ def index():
 
     if search_query:
         todos = Todo.query.filter(Todo.task.ilike(f"%{search_query}%")).all()
-    else :
+    else:
         todos = Todo.query.all()
-        
-    return render_template('index.html', todos=todos, search_query=search_query)
+
+    page = request.args.get("page", 1, type=int)  # Ambil nomor halaman dari URL
+    per_page = 5  # Jumlah tugas per halaman
+    total_todos = len(todos)  # Total jumlah tugas
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_todos = todos[start:end]  # Ambil tugas berdasarkan halaman
+    
+    total_pages = (total_todos + per_page - 1) // per_page  # Hitung jumlah halaman
+
+    return render_template(
+        'index.html', 
+        todos=paginated_todos,
+        search_query=search_query,
+        page=page,
+        total_pages=total_pages  # Ubah total_todos menjadi total_pages
+    )
 
 @app.route('/add', methods=['POST'])
 def add_todo():
