@@ -59,13 +59,15 @@ def add_todo():
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_todo(id):
     todo = Todo.query.get_or_404(id)
+    next_url = request.args.get('next') or url_for('index')  # Ambil "next" dari URL
     if request.method == 'POST':
         todo.task = request.form.get('task')
         todo.status = 'status' in request.form
         db.session.commit()
         flash('Tugas berhasil diperbarui!', 'success')
-        return redirect(request.referrer or url_for('index'))
+        return redirect(next_url)  # Gunakan next_url
     return render_template('edit.html', todo=todo)
+
 
 @app.route('/delete/<int:id>')
 def delete_todo(id):
@@ -85,4 +87,4 @@ def toggle_status(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
