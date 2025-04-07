@@ -57,7 +57,7 @@ def edit_todo(id):
         todo.status = 'status' in request.form
         db.session.commit()
         flash('Tugas berhasil diperbarui!', 'success')
-        return redirect(url_for('index'))
+        return redirect(request.referrer or url_for('index'))
     return render_template('edit.html', todo=todo)
 
 @app.route('/delete/<int:id>')
@@ -74,7 +74,8 @@ def toggle_status(id):
     todo.status = not todo.status  # Toggle status
     db.session.commit()
     flash('Status tugas berhasil diubah!', 'success')
-    return redirect(url_for('index'))
+    return redirect(request.referrer or url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -40,9 +40,9 @@
                 <div>
                     <a href="{{ url_for('toggle_status', id=todo.id) }}" class="btn btn-sm btn-secondary">
                         {% if todo.status %}
-                            Tandai Belum Selesai
+                            Belum
                         {% else %}
-                            Tandai Selesai
+                            Selesai
                         {% endif %}
                     </a>
                     <a href="{{ url_for('edit_todo', id=todo.id) }}" class="btn btn-sm btn-warning">Edit</a>
