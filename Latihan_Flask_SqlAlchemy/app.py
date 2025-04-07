@@ -22,21 +22,28 @@ def index():
     else:
         todos = Todo.query.all()
 
-    page = request.args.get("page", 1, type=int)  # Ambil nomor halaman dari URL
-    per_page = 5  # Jumlah tugas per halaman
-    total_todos = len(todos)  # Total jumlah tugas
+    page = request.args.get("page", 1, type=int)
+    per_page = 5
+    total_todos = len(todos)
     start = (page - 1) * per_page
     end = start + per_page
-    paginated_todos = todos[start:end]  # Ambil tugas berdasarkan halaman
+    paginated_todos = todos[start:end]
     
-    total_pages = (total_todos + per_page - 1) // per_page  # Hitung jumlah halaman
+    total_pages = (total_todos + per_page - 1) // per_page
+
+    # Pagination dinamis: hanya tampilkan 5 halaman per grup
+    visible_pages = 5
+    start_page = max(1, page - (page - 1) % visible_pages)
+    end_page = min(start_page + visible_pages - 1, total_pages)
 
     return render_template(
         'index.html', 
         todos=paginated_todos,
         search_query=search_query,
         page=page,
-        total_pages=total_pages  # Ubah total_todos menjadi total_pages
+        total_pages=total_pages,
+        start_page=start_page,
+        end_page=end_page
     )
 
 @app.route('/add', methods=['POST'])
