@@ -25,10 +25,11 @@
         <!-- Tambah Tugas -->
         <form action="{{ url_for('add_todo') }}" method="POST" class="mb-3">
             <div class="form-group">
-                <input type="text" name="task" class="form-control" placeholder="Tambahkan tugas baru" required>
+                <textarea id="taskInput" name="task" class="form-control" rows="1" placeholder="Tambahkan tugas baru" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Tambah</button>
         </form>
+        
 
         <!-- Daftar Tugas -->
         <div class="flex-grow-1">
@@ -79,6 +80,8 @@
         </nav>
         
     </main>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
 </html>
